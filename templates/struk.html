@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Struk — Kasir Bulutangkis (Python)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            background: #fce4ec;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px;
+            gap: 12px;
+        }
+        .struk {
+            background: #fff;
+            width: 300px;
+            padding: 20px 16px;
+            border: 1px solid #f48fb1;
+            border-radius: 4px;
+        }
+        /* Tombol aksi di luar struk */
+        .aksi {
+            display: flex;
+            gap: 8px;
+            width: 300px;
+        }
+        .btn {
+            flex: 1;
+            padding: 9px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn-print { background: #c2185b; color: #fff; }
+        .btn-back  { background: #555;    color: #fff; }
+        .btn:hover { opacity: 0.85; }
+
+        /* Struk styling */
+        .struk-judul { text-align: center; margin-bottom: 12px; }
+        .struk-judul h2 { font-size: 14px; font-weight: bold; letter-spacing: 0.5px; }
+        .struk-judul p  { font-size: 11px; color: #666; margin-top: 2px; }
+        .struk-icon { font-size: 28px; color: #c2185b; margin-bottom: 4px; }
+
+        hr { border: none; border-top: 1px dashed #ccc; margin: 8px 0; }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #555;
+            padding: 1px 0;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        td    { padding: 3px 0; font-size: 12px; vertical-align: top; }
+        .col-nama { width: 55%; }
+        .col-qty  { width: 10%; text-align: center; }
+        .col-sub  { width: 35%; text-align: right; }
+        .item-satuan { font-size: 10px; color: #888; }
+
+        .calc-row { display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0; }
+        .calc-row.diskon { color: #c2185b; font-weight: bold; }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 6px 0 4px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 11px;
+            color: #888;
+            line-height: 2;
+        }
+        .footer i { color: #c2185b; }
+
+        @media print {
+            body { background: none; padding: 0; }
+            .aksi { display: none; }
+            .struk { border: none; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+{% if not keranjang %}
+<!-- KASUS: KERANJANG KOSONG -->
+<div class="struk" style="text-align:center; padding: 32px 18px;">
+    <div style="font-size: 36px; color: #c2185b; margin-bottom: 10px;">
+        <i class="fa-solid fa-basket-shopping"></i>
+    </div>
+    <h2 style="font-size: 15px; color: #111; margin-bottom: 6px;">KERANJANG KOSONG</h2>
+    <p style="font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 18px;">
+        Belum ada item belanja yang dipilih untuk dicetak struknya.
+    </p>
+    <a href="{{ url_for('index') }}" class="btn btn-print" style="text-decoration:none; display:inline-flex; width: 100%; justify-content: center;">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Kasir
+    </a>
+</div>
+
+{% elif bayar_sesi <= 0 %}
+<!-- KASUS: UANG BAYAR BELUM DIISI -->
+<div class="struk" style="text-align:center; padding: 32px 18px;">
+    <div style="font-size: 38px; color: #c2185b; margin-bottom: 10px;">
+        <i class="fa-solid fa-hand-holding-dollar"></i>
+    </div>
+    <h2 style="font-size: 15px; color: #111; margin-bottom: 6px;">UANG BAYAR BELUM DIISI</h2>
+    <p style="font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 18px;">
+        Struk transaksi hanya dapat dicetak setelah nominal uang pembayaran dimasukkan dan dihitung di kasir.
+    </p>
+    <a href="{{ url_for('index') }}" class="btn btn-print" style="text-decoration:none; display:inline-flex; width: 100%; justify-content: center;">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Kasir
+    </a>
+</div>
+
+{% elif bayar_sesi < total %}
+<!-- KASUS: UANG BAYAR KURANG -->
+<div class="struk" style="text-align:center; padding: 32px 18px;">
+    <div style="font-size: 38px; color: #dc2626; margin-bottom: 10px;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h2 style="font-size: 15px; color: #111; margin-bottom: 6px;">PEMBAYARAN BELUM LUNAS</h2>
+    <p style="font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 8px;">
+        Total Belanja: <strong>{{ rp(total) }}</strong><br>
+        Uang Diterima: <strong>{{ rp(bayar_sesi) }}</strong><br>
+        <span style="color:#dc2626; font-weight:bold;">Kekurangan: {{ rp(total - bayar_sesi) }}</span>
+    </p>
+    <p style="font-size: 12px; color: #888; margin-bottom: 18px;">
+        Harap selesaikan sisa pembayaran sebelum mencetak struk.
+    </p>
+    <a href="{{ url_for('index') }}" class="btn btn-print" style="text-decoration:none; display:inline-flex; width: 100%; justify-content: center;">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Kasir
+    </a>
+</div>
+
+{% else %}
+<!-- STRUK VALID -->
+<div class="struk">
+    <div class="struk-judul">
+        <div class="struk-icon"><i class="fa-solid fa-person-running"></i></div>
+        <h2>GOR BULUTANGKIS</h2>
+        <p>Jl. Olahraga No. 1, Kota Sport</p>
+        <p>Telp: 0812-3456-7890</p>
+    </div>
+    <hr>
+    <div class="info-row"><span><i class="fa-solid fa-receipt"></i> No Transaksi</span><span>{{ no_trx }}</span></div>
+    <div class="info-row"><span><i class="fa-regular fa-calendar"></i> Tanggal</span><span>{{ tanggal }}</span></div>
+    <div class="info-row"><span><i class="fa-solid fa-user"></i> Kasir</span><span>Sistem (Python)</span></div>
+    <hr>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="col-nama" style="text-align:left; font-size:11px; color:#c2185b; padding-bottom:4px">Item</th>
+                <th class="col-qty"  style="font-size:11px; color:#c2185b">Qty</th>
+                <th class="col-sub"  style="font-size:11px; color:#c2185b; text-align:right">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for kode, item in keranjang.items() %}
+            {% set sub = item.harga * item.qty %}
+            <tr>
+                <td class="col-nama">
+                    {{ item.nama }}<br>
+                    <span class="item-satuan">{{ rp(item.harga) }} / {{ item.satuan }}</span>
+                </td>
+                <td class="col-qty">{{ item.qty }}</td>
+                <td class="col-sub">{{ rp(sub) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+    <div class="calc-row"><span>Subtotal</span><span>{{ rp(subtotal) }}</span></div>
+    {% if diskon_pct > 0 %}
+    <div class="calc-row diskon">
+        <span><i class="fa-solid fa-tag"></i> Diskon {{ diskon_pct }}%</span>
+        <span>- {{ rp(diskon_nominal) }}</span>
+    </div>
+    {% endif %}
+    <div class="calc-row"><span>PPN 11%</span><span>{{ rp(pajak) }}</span></div>
+    <hr>
+    <div class="total-row">
+        <span>TOTAL</span>
+        <span style="color:#c2185b">{{ rp(total) }}</span>
+    </div>
+
+    <hr>
+    <div class="calc-row" style="font-weight:700">
+        <span><i class="fa-solid fa-money-bill-wave" style="color:#16a34a"></i> Uang Bayar</span>
+        <span>{{ rp(bayar_sesi) }}</span>
+    </div>
+    <div class="calc-row kembalian-row" style="font-weight:800; font-size:14px">
+        <span><i class="fa-solid fa-hand-holding-dollar" style="color:#c2185b"></i> Kembalian</span>
+        <span style="color:#c2185b">{{ rp(kembalian) }}</span>
+    </div>
+
+    <div class="footer">
+        <i class="fa-solid fa-star"></i> Terima kasih sudah bermain! <i class="fa-solid fa-star"></i><br>
+        Sampai jumpa kembali
+    </div>
+</div>
+
+<!-- TOMBOL AKSI -->
+<div class="aksi">
+    <button class="btn btn-print" onclick="window.print()">
+        <i class="fa-solid fa-print"></i> Print Struk
+    </button>
+    <a href="{{ url_for('index') }}" class="btn btn-back">
+        <i class="fa-solid fa-arrow-left"></i> Kembali
+    </a>
+</div>
+{% endif %}
+
+</body>
+</html>

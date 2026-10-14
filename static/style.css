@@ -1,0 +1,658 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --pink:        #e91e8c;
+    --pink-dark:   #c2176f;
+    --pink-dim:    #f472b6;
+    --pink-pale:   #fdf2f8;
+    --pink-glow:   rgba(233,30,140,0.12);
+    --dark:        #111827;
+    --dark2:       #1f2937;
+    --dark3:       #374151;
+    --white:       #ffffff;
+    --light-gray:  #f9fafb;
+    --border:      #e5e7eb;
+    --border-pink: #fbb6d9;
+    --text:        #111827;
+    --text-sub:    #6b7280;
+    --text-muted:  #9ca3af;
+    --success:     #16a34a;
+    --danger:      #dc2626;
+    --shadow:      0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+    --shadow-pink: 0 4px 20px rgba(233,30,140,0.18);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    background: #f3f4f6;
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* ===================================================
+   HEADER — Dark sport style
+=================================================== */
+.header {
+    background: var(--dark);
+    color: #fff;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Pink accent stripe di kiri header */
+.header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    background: var(--pink);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px 0 32px;
+    height: 60px;
+    gap: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 38px;
+    height: 38px;
+    background: var(--pink);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.brand-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.brand-name span { color: var(--pink); }
+
+.brand-sub {
+    font-size: 10px;
+    color: #6b7280;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    font-weight: 500;
+}
+
+.header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.meta-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #374151;
+    color: #9ca3af;
+    letter-spacing: 0.3px;
+}
+
+.meta-badge i { color: var(--pink); font-size: 11px; }
+
+/* ===================================================
+   NOTIFIKASI
+=================================================== */
+.notif {
+    padding: 10px 28px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-left: 4px solid;
+}
+
+.notif-ok {
+    background: #f0fdf4;
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.notif-err {
+    background: #fef2f2;
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+/* ===================================================
+   LAYOUT
+=================================================== */
+.wrapper {
+    display: flex;
+    gap: 20px;
+    padding: 20px 24px 32px;
+    align-items: flex-start;
+}
+
+/* ===================================================
+   PANEL
+=================================================== */
+.kolom-produk,
+.kolom-kasir {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.kolom-produk { flex: 1.3; }
+.kolom-kasir  { flex: 1; min-width: 370px; }
+
+/* Panel header — sport style */
+.kolom-produk h2,
+.kolom-kasir h2 {
+    background: var(--dark);
+    color: #fff;
+    padding: 12px 18px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+/* Pink underline aksen */
+.kolom-produk h2::after,
+.kolom-kasir h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--pink), transparent);
+}
+
+.kolom-produk h2 i,
+.kolom-kasir h2 i {
+    color: var(--pink);
+    font-size: 14px;
+}
+
+/* ===================================================
+   TABEL PRODUK
+=================================================== */
+.tabel-produk {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabel-produk thead th {
+    background: #f9fafb;
+    border-bottom: 2px solid var(--border);
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.tabel-produk tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.tabel-produk tbody tr:last-child td { border-bottom: none; }
+
+.tabel-produk tbody tr:hover td {
+    background: var(--pink-pale);
+}
+
+.no-col {
+    width: 36px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.nama-produk {
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+}
+
+.item-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.harga-col {
+    text-align: right;
+    font-weight: 700;
+    color: var(--dark);
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.satuan-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* ===================================================
+   TABEL KERANJANG
+=================================================== */
+.tabel-keranjang {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabel-keranjang thead th {
+    background: #f9fafb;
+    border-bottom: 2px solid var(--border);
+    padding: 8px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    text-align: left;
+}
+
+.tabel-keranjang tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.tabel-keranjang tbody tr:last-child td { border-bottom: none; }
+.tabel-keranjang tbody tr:hover td { background: var(--pink-pale); }
+
+/* ===================================================
+   KOSONG STATE
+=================================================== */
+.kosong {
+    padding: 40px 18px;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.kosong i {
+    font-size: 36px;
+    opacity: 0.2;
+    color: var(--dark);
+}
+
+.kosong span {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ===================================================
+   SECTION DISKON
+=================================================== */
+.section-diskon {
+    padding: 12px 16px;
+    background: #f9fafb;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.section-diskon label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-sub);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.section-diskon label i { color: var(--pink); }
+
+/* ===================================================
+   RINGKASAN
+=================================================== */
+.tabel-ringkasan {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabel-ringkasan td {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--text-sub);
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.tabel-ringkasan td:last-child {
+    text-align: right;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.row-diskon td { color: var(--pink) !important; font-weight: 700; }
+
+.row-total {
+    background: var(--dark) !important;
+}
+
+.row-total td {
+    padding: 13px 16px !important;
+    border-bottom: none !important;
+    color: #fff !important;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px !important;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.row-total td:last-child {
+    color: var(--pink) !important;
+    font-size: 20px !important;
+}
+
+/* ===================================================
+   SECTION BAYAR
+=================================================== */
+.section-bayar {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--light-gray);
+}
+
+.section-bayar label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-sub);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.section-bayar label i { color: var(--pink); }
+
+.kotak-kembalian,
+.kotak-kekurangan {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kotak-kembalian {
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    color: var(--success);
+}
+
+.kotak-kekurangan {
+    background: #fef2f2;
+    border: 1.5px solid #fca5a5;
+    color: var(--danger);
+}
+
+/* ===================================================
+   SECTION AKSI
+=================================================== */
+.section-aksi {
+    display: flex;
+    gap: 8px;
+    padding: 14px 16px 8px;
+    background: var(--white);
+}
+
+.pesan-struk-info {
+    padding: 0 16px 14px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--white);
+}
+
+.pesan-struk-info i { font-size: 13px; }
+.pesan-struk-info.pesan-struk-kurang { color: var(--danger); }
+.pesan-struk-info.pesan-struk-sukses { color: var(--success); }
+
+.btn-disabled {
+    opacity: 0.55;
+    cursor: not-allowed !important;
+    background: #6b7280 !important;
+    color: #e5e7eb !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.btn-disabled:hover {
+    filter: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn-disabled i {
+    color: #d1d5db !important;
+}
+
+
+/* ===================================================
+   UTILITY
+=================================================== */
+.center { text-align: center; }
+.right  { text-align: right; }
+
+.form-inline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ===================================================
+   INPUT
+=================================================== */
+.input-qty {
+    width: 52px;
+    padding: 6px 6px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: #fff;
+    transition: border-color 0.15s;
+}
+
+.input-qty:focus {
+    outline: none;
+    border-color: var(--pink);
+}
+
+.input-bayar {
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    width: 175px;
+    color: var(--text);
+    background: #fff;
+    transition: border-color 0.15s;
+}
+
+.input-bayar:focus {
+    outline: none;
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px var(--pink-glow);
+}
+
+.select-diskon {
+    padding: 6px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.select-diskon:focus {
+    outline: none;
+    border-color: var(--pink);
+}
+
+/* ===================================================
+   TOMBOL — Sport style
+=================================================== */
+.btn {
+    padding: 7px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+.btn:hover  { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.btn:active { transform: translateY(0); filter: brightness(0.96); }
+
+/* Pink sport button */
+.btn-pink {
+    background: var(--pink);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(233,30,140,0.3);
+}
+
+/* Dark button */
+.btn-dark {
+    background: var(--dark);
+    color: #fff;
+}
+
+/* Red button */
+.btn-merah {
+    background: #fef2f2;
+    color: var(--danger);
+    border: 1.5px solid #fca5a5;
+}
+
+.btn-merah:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+/* Gray confirm */
+.btn-abu {
+    background: #f3f4f6;
+    color: var(--text-sub);
+    border: 1.5px solid var(--border);
+}
+
+/* Cetak button */
+.btn-cetak {
+    background: var(--dark);
+    color: #fff;
+    flex: 1;
+    justify-content: center;
+    padding: 11px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+}
+
+.btn-cetak i { color: var(--pink); }
+
+.btn-kecil { padding: 4px 9px; font-size: 12px; }
+
+/* ===================================================
+   RESPONSIVE
+=================================================== */
+@media (max-width: 900px) {
+    .wrapper { flex-direction: column; padding: 12px; }
+    .kolom-kasir { min-width: 0; width: 100%; }
+    .header-meta { display: none; }
+}
